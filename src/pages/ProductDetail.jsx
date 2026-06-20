@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import products from '../data/products.js';
 import { useCart } from '../context/CartContext.jsx';
@@ -10,6 +10,7 @@ const whatsappNumber = '9558698837';
 function ProductDetail() {
   const { id } = useParams();
   const { addItem } = useCart();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [buyer, setBuyer] = useState({ name: '', phone: '', address: '' });
   const [errors, setErrors] = useState({});
@@ -32,7 +33,14 @@ function ProductDetail() {
 
   const subtotal = product.price * quantity;
 
-  const handleBuyNow = () => {
+  // Cart mein add karke /cart pe redirect
+  const handleBuyNowCart = () => {
+    addItem(product, quantity);
+    navigate('/cart');
+  };
+
+  // WhatsApp checkout (buyer info validate karke)
+  const handleWhatsAppCheckout = () => {
     const nextErrors = {};
     if (!buyer.name.trim()) nextErrors.name = 'Name is required.';
     if (!buyer.phone.trim()) nextErrors.phone = 'Phone number is required.';
@@ -77,8 +85,9 @@ function ProductDetail() {
                 >
                   Add to Cart
                 </button>
+                {/* Buy Now — cart mein add karke redirect */}
                 <button
-                  onClick={handleBuyNow}
+                  onClick={handleBuyNowCart}
                   className="inline-flex items-center justify-center rounded-full border border-stone-200 bg-white px-6 py-4 text-sm font-semibold text-stone-700 shadow-sm transition duration-300 hover:border-[#C9A227]/50 hover:text-stone-900"
                 >
                   Buy Now
@@ -86,6 +95,7 @@ function ProductDetail() {
               </div>
             </div>
           </motion.div>
+
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="rounded-[2.5rem] border border-stone-200 bg-white/80 p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl sm:p-8">
               <h2 className="text-2xl font-semibold text-stone-900">Order Details</h2>
@@ -107,6 +117,7 @@ function ProductDetail() {
                 </div>
               </div>
             </div>
+
             <div className="rounded-[2.5rem] border border-stone-200 bg-white/80 p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl sm:p-8">
               <h2 className="text-2xl font-semibold text-stone-900">Buyer Information</h2>
               <div className="mt-6 space-y-4">
@@ -135,8 +146,9 @@ function ProductDetail() {
                   placeholder="Enter delivery address"
                 />
                 {errors.address && <p className="text-sm text-red-500">{errors.address}</p>}
+                {/* WhatsApp Checkout — buyer info validate karke */}
                 <button
-                  onClick={handleBuyNow}
+                  onClick={handleWhatsAppCheckout}
                   className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#C9A227] to-[#9C7A1B] px-6 py-4 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(201,162,39,0.5)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_-8px_rgba(201,162,39,0.65)]"
                 >
                   Checkout on WhatsApp
