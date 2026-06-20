@@ -29,7 +29,7 @@ function Contact() {
             </div>
             <div className="space-y-3">
               <p className="text-sm uppercase tracking-[0.35em] text-[#B8932A]">Phone</p>
-              <p className="text-stone-700">+91 98765 43210</p>
+              <p className="text-stone-700">+91 95586 98837</p>
             </div>
             <a
               href={whatsappUrl}

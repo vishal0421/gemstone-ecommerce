@@ -13,7 +13,6 @@ import { CartProvider } from './context/CartContext.jsx';
 
 function App() {
   const location = useLocation();
-
   return (
     <CartProvider>
       <div className="min-h-screen bg-[#0B0B12] text-white selection:bg-purple-500 selection:text-black">
@@ -41,7 +40,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
-        <Footer />
+        {/* Footer ke neeche mobile bottom nav ka space */}
+        <div className="pb-20 lg:pb-0">
+          <Footer />
+        </div>
       </div>
     </CartProvider>
   );
